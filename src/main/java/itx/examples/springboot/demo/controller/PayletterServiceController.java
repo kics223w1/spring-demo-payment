@@ -27,63 +27,45 @@ public class PayletterServiceController {
 
     @PostMapping(path = "/noti")
     public ResponseEntity<String> receiveNotification(
-            @RequestParam String storeid,
-            @RequestParam String countrycode,
-            @RequestParam String currency,
-            @RequestParam String storeorderno,
-            @RequestParam String payamt,
-            @RequestParam String payerid,
-            @RequestParam String payeremail,
-            @RequestParam String servicename,
-            @RequestParam(required = false) String custom,
-            @RequestParam(required = false) String payinfo,
-            @RequestParam String pginfo,
-            @RequestParam String timestamp,
-            @RequestParam String hash,
-            @RequestParam String notifytype,
-            @RequestParam String paytoken,
-            @RequestParam String trantime,
-            @RequestParam String retcode,
-            @RequestParam(required = false) String retmsg,
-            @RequestParam(required = false) String poqtoken,
-            @RequestParam String cardkind,
-            @RequestParam String cardno,
-            @RequestParam String notifyid) {
+            @RequestParam String paytoken) {
 
-        LOG.info("Received Payletter Notification: storeid={}, currency={}, storeorderno={}, payamt={}, payerid={}, notifytype={}",
-                storeid, currency, storeorderno, payamt, payerid, notifytype);
 
-        // 1. Check if the required parameters are present
-        if (storeid == null || currency == null || storeorderno == null || payamt == null || payerid == null || timestamp == null) {
-            return ResponseEntity.ok("<RESULT>FAIL</RESULT>");
-        }
+        System.out.println("paytoken: " + paytoken);
 
-        // 2. Validate the return code
-        if (!"0".equals(retcode)) {
-            return ResponseEntity.ok("<RESULT>FAIL</RESULT>");
-        }
+        LOG.info("Received Payletter Notification: paytoken={}",
+                paytoken);
 
-        // 3. Verify the SHA256 hash
-        String hashData = storeid + currency + storeorderno + payamt + payerid + timestamp + HASH_KEY;
-        String verifyHash = hashService.generateHash(hashData);
-        if (!verifyHash.equals(hash)) {
-            return ResponseEntity.ok("<RESULT>FAIL</RESULT>");
-        }
-
-        // 4. Process according to NotifyType
-        switch (notifytype) {
-            case "1":
-                // Success/Purchasing processing progress
-                // Implement success logic here (e.g., charge the customer)
-                break;
-            case "2":
-                // Refund/Cancellation processing
-                // Implement refund logic here
-                break;
-            default:
-                // Invalid NotifyType, refer to documentation
-                break;
-        }
+//        // 1. Check if the required parameters are present
+//        if (storeid == null || currency == null || storeorderno == null || payamt == null || payerid == null || timestamp == null) {
+//            return ResponseEntity.ok("<RESULT>FAIL</RESULT>");
+//        }
+//
+//        // 2. Validate the return code
+//        if (!"0".equals(retcode)) {
+//            return ResponseEntity.ok("<RESULT>FAIL</RESULT>");
+//        }
+//
+//        // 3. Verify the SHA256 hash
+//        String hashData = storeid + currency + storeorderno + payamt + payerid + timestamp + HASH_KEY;
+//        String verifyHash = hashService.generateHash(hashData);
+//        if (!verifyHash.equals(hash)) {
+//            return ResponseEntity.ok("<RESULT>FAIL</RESULT>");
+//        }
+//
+//        // 4. Process according to NotifyType
+//        switch (notifytype) {
+//            case "1":
+//                // Success/Purchasing processing progress
+//                // Implement success logic here (e.g., charge the customer)
+//                break;
+//            case "2":
+//                // Refund/Cancellation processing
+//                // Implement refund logic here
+//                break;
+//            default:
+//                // Invalid NotifyType, refer to documentation
+//                break;
+//        }
 
         // Return OK if everything was processed successfully
         return ResponseEntity.ok("<RESULT>OK</RESULT>");
